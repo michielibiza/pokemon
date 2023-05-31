@@ -58,6 +58,7 @@ dependencies {
     implementation libs.material3
 
     implementation project(":core:design")
+    implementation project(":feature:species-presentation")
 
     testImplementation libs.junit
 
