@@ -52,6 +52,7 @@ roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = 
 mockk = { group = "io.mockk", name = "mockk", version = "1.13.5" }
 testCoroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
 rx = { group = "io.reactivex.rxjava3", name = "rxjava", version = "3.1.6" }
+rx-compose = { group = "androidx.compose.runtime", name = "runtime-rxjava3", version = "1.4.3" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
