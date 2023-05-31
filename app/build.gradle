@@ -65,10 +65,10 @@ dependencies {
     implementation project(":feature:species-presentation")
 
     testImplementation libs.junit
+    testImplementation libs.ui.test.junit4
 
     androidTestImplementation libs.androidx.test.ext.junit
     androidTestImplementation libs.espresso.core
-    androidTestImplementation libs.ui.test.junit4
 
     debugImplementation libs.ui.tooling
     debugImplementation libs.ui.test.manifest
