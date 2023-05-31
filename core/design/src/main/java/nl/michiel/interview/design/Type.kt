@@ -1,4 +1,4 @@
-package nl.michiel.interview.pokemon.ui.theme
+package nl.michiel.interview.design
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

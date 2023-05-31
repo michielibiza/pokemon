@@ -1,4 +1,4 @@
-package nl.michiel.interview.pokemon.ui.theme
+package nl.michiel.interview.design
 
 import android.app.Activity
 import android.os.Build
