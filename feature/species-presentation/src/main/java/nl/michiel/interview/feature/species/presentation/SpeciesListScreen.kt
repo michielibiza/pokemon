@@ -24,10 +24,11 @@ import coil.compose.AsyncImage
 import nl.michiel.interview.design.PokemonTheme
 import nl.michiel.interview.feature.species.domain.entities.Specie
 import nl.michiel.interview.feature.species.domain.mock.MockSpeciesRepository
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SpeciesListScreen(
-    viewModel: SpeciesListViewModel = SpeciesListViewModel(MockSpeciesRepository()),
+    viewModel: SpeciesListViewModel = koinViewModel(),
 ) {
     val species = viewModel.getSpecies().subscribeAsState(emptyList())
     SpeciesListScreen(species.value)
