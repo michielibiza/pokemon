@@ -1,8 +1,10 @@
 package nl.michiel.interview.feature.species.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,24 +30,34 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SpeciesListScreen(
+    onSpeciesClick: (Specie) -> Unit = {},
     viewModel: SpeciesListViewModel = koinViewModel(),
 ) {
     val species = viewModel.getSpecies().subscribeAsState(emptyList())
-    SpeciesListScreen(species.value)
+    SpeciesListScreen(species.value, onSpeciesClick)
 }
 
 @Composable
-fun SpeciesListScreen(species: List<Specie>) {
+fun SpeciesListScreen(
+    species: List<Specie>,
+    onSpeciesClick: (Specie) -> Unit = {},
+) {
     LazyColumn {
         items(species.size) { index ->
-            SpeciesCard(species[index])
+            SpeciesCard(species[index], onClick = { onSpeciesClick(species[index]) })
         }
     }
 }
 
 @Composable
-fun SpeciesCard(specie: Specie) {
-    Row(Modifier.padding(16.dp, 8.dp), verticalAlignment = Alignment.CenterVertically) {
+fun SpeciesCard(specie: Specie, onClick: () -> Unit = {}) {
+    Row(
+        Modifier
+            .clickable { onClick() }
+            .padding(16.dp, 8.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         if (LocalInspectionMode.current) {
             // show dummy in preview
             Icon(
