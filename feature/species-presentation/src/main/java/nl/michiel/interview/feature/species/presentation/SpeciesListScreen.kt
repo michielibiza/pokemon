@@ -24,13 +24,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import nl.michiel.interview.design.PokemonTheme
-import nl.michiel.interview.feature.species.domain.entities.Specie
+import nl.michiel.interview.feature.species.domain.entities.Species
 import nl.michiel.interview.feature.species.domain.mock.MockSpeciesRepository
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SpeciesListScreen(
-    onSpeciesClick: (Specie) -> Unit = {},
+    onSpeciesClick: (Species) -> Unit = {},
     viewModel: SpeciesListViewModel = koinViewModel(),
 ) {
     val species = viewModel.getSpecies().subscribeAsState(emptyList())
@@ -39,8 +39,8 @@ fun SpeciesListScreen(
 
 @Composable
 fun SpeciesListScreen(
-    species: List<Specie>,
-    onSpeciesClick: (Specie) -> Unit = {},
+    species: List<Species>,
+    onSpeciesClick: (Species) -> Unit = {},
 ) {
     LazyColumn {
         items(species.size) { index ->
@@ -50,7 +50,7 @@ fun SpeciesListScreen(
 }
 
 @Composable
-fun SpeciesCard(specie: Specie, onClick: () -> Unit = {}) {
+fun SpeciesCard(species: Species, onClick: () -> Unit = {}) {
     Row(
         Modifier
             .clickable { onClick() }
@@ -70,7 +70,7 @@ fun SpeciesCard(specie: Specie, onClick: () -> Unit = {}) {
             )
         } else {
             AsyncImage(
-                model = specie.imageUrl,
+                model = species.imageUrl,
                 contentDescription = "",
                 modifier = Modifier
                     .size(40.dp)
@@ -78,7 +78,7 @@ fun SpeciesCard(specie: Specie, onClick: () -> Unit = {}) {
             )
         }
         Spacer(Modifier.width(16.dp))
-        Text(text = specie.name, style = MaterialTheme.typography.bodyLarge)
+        Text(text = species.name, style = MaterialTheme.typography.bodyLarge)
     }
 }
 

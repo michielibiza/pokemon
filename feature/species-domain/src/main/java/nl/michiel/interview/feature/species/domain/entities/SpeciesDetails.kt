@@ -1,8 +1,8 @@
 package nl.michiel.interview.feature.species.domain.entities
 
-data class SpecieDetails(
-    val specie: Specie,
+data class SpeciesDetails(
+    val species: Species,
     val description: String,
     val captureRate: Int,
-    val nextEvolution: Specie?,
+    val nextEvolution: Species?,
 )

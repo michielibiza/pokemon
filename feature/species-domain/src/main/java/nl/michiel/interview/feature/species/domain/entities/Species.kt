@@ -1,6 +1,6 @@
 package nl.michiel.interview.feature.species.domain.entities
 
-data class Specie(
+data class Species(
     val id: Long,
     val name: String,
 ) {

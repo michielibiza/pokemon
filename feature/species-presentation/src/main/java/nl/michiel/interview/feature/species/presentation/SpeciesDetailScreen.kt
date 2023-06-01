@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun SpecieDetailScreen(id: Long, name: String) {
+fun SpeciesDetailScreen(id: Long, name: String) {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(text = "Detail screen for $name ($id)")
     }

@@ -23,8 +23,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import nl.michiel.interview.design.PokemonTheme
-import nl.michiel.interview.feature.species.domain.entities.Specie
-import nl.michiel.interview.feature.species.presentation.SpecieDetailScreen
+import nl.michiel.interview.feature.species.domain.entities.Species
+import nl.michiel.interview.feature.species.presentation.SpeciesDetailScreen
 import nl.michiel.interview.feature.species.presentation.SpeciesListScreen
 import nl.michiel.interview.pokemon.R
 import nl.michiel.interview.pokemon.view.Routes.DETAIL_ARG_ID
@@ -43,7 +43,7 @@ object Routes {
         navArgument(DETAIL_ARG_NAME) { type = NavType.StringType },
     )
 
-    fun detail(specie: Specie) = "$DETAIL_BASE/${specie.id}/${specie.name}"
+    fun detail(species: Species) = "$DETAIL_BASE/${species.id}/${species.name}"
 }
 
 
@@ -81,7 +81,7 @@ fun MainNavigation() {
                             ?.let { args ->
                                 val id = args.getLong(DETAIL_ARG_ID)
                                 val name = args.getString(DETAIL_ARG_NAME) ?: ""
-                                SpecieDetailScreen(id, name)
+                                SpeciesDetailScreen(id, name)
                             }
                             ?: throw IllegalStateException("Missing arguments")
                     }

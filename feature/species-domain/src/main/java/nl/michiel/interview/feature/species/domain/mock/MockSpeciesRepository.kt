@@ -2,31 +2,31 @@ package nl.michiel.interview.feature.species.domain.mock
 
 import io.reactivex.rxjava3.core.Observable
 import nl.michiel.interview.feature.species.domain.SpeciesRepository
-import nl.michiel.interview.feature.species.domain.entities.Specie
-import nl.michiel.interview.feature.species.domain.entities.SpecieDetails
+import nl.michiel.interview.feature.species.domain.entities.Species
+import nl.michiel.interview.feature.species.domain.entities.SpeciesDetails
 import java.util.concurrent.TimeUnit
 
 class MockSpeciesRepository : SpeciesRepository {
-    override fun getSpecies(): Observable<List<Specie>> {
+    override fun getSpecies(): Observable<List<Species>> {
         return Observable.just(listOf(bulbasaur, ivysaur, venusaur))
             .delay(500, TimeUnit.MILLISECONDS)
     }
 
-    override fun getSpecies(id: Long): Observable<SpecieDetails> {
-        return Observable.just(SpecieDetails(bulbasaur, DESCRIPTION, CAPTURE_RATE, ivysaur))
+    override fun getSpecies(id: Long): Observable<SpeciesDetails> {
+        return Observable.just(SpeciesDetails(bulbasaur, DESCRIPTION, CAPTURE_RATE, ivysaur))
             .delay(300, TimeUnit.MILLISECONDS)
     }
 
     companion object {
-        val bulbasaur = Specie(
+        val bulbasaur = Species(
             1,
             "Bulbasaur",
         )
-        val ivysaur = Specie(
+        val ivysaur = Species(
             2,
             "Ivysaur",
         )
-        val venusaur = Specie(
+        val venusaur = Species(
             3,
             "Venusaur",
         )
