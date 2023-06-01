@@ -1,5 +1,6 @@
 package nl.michiel.interview.feature.species.domain.mock
 
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import nl.michiel.interview.feature.species.domain.SpeciesRepository
 import nl.michiel.interview.feature.species.domain.entities.Species
@@ -26,6 +27,10 @@ class MockSpeciesRepository : SpeciesRepository {
             )
         )
             .delay(300, TimeUnit.MILLISECONDS)
+    }
+
+    override fun sync(): Completable {
+        return Completable.complete()
     }
 
     companion object {

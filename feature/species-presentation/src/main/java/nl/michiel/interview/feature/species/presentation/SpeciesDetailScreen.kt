@@ -16,6 +16,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,8 +38,9 @@ fun SpeciesDetailScreen(
     name: String,
     viewModel: SpeciesDetailViewModel = koinViewModel()
 ) {
-    val details = viewModel.getSpecies(id).subscribeAsState(initial = null)
-    SpeciesDetailScreen(name, details.value)
+    val species = remember { viewModel.getSpecies(id) }
+    val details by species.subscribeAsState(initial = null)
+    SpeciesDetailScreen(name, details)
 }
 
 @Composable

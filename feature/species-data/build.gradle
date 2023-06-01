@@ -1,6 +1,7 @@
 plugins {
     alias libs.plugins.androidLibrary
     alias libs.plugins.kotlinAndroid
+    alias libs.plugins.kotlinKsp
 }
 
 android {
@@ -38,8 +39,13 @@ dependencies {
     implementation libs.retrofit.moshi
     implementation libs.retrofit.rx
     implementation libs.loggingInterceptor
+    implementation libs.room
+    implementation libs.roomRx
 
     implementation project(":feature:species-domain")
+
+    annotationProcessor(libs.roomCompiler)
+    ksp(libs.roomCompiler)
 
     testImplementation libs.junit
 }

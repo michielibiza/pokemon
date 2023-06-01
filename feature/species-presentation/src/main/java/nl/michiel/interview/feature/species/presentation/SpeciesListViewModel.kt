@@ -7,6 +7,12 @@ class SpeciesListViewModel(
     private val repository: SpeciesRepository,
 ) : ViewModel() {
 
+    init {
+        //TODO only do this once a day
+        //ideally you would check if the data is stale, by querying the API
+        repository.sync().subscribe()
+    }
+
     fun getSpecies() = repository.getSpecies()
 
 }

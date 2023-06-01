@@ -48,7 +48,7 @@ retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", v
 retrofit-rx = { group = "com.squareup.retrofit2", name = "adapter-rxjava3", version.ref = "retrofit" }
 loggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version = "4.11.0" }
 room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
-roomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+roomRx = { group = "androidx.room", name = "room-rxjava3", version.ref = "room" }
 roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 mockk = { group = "io.mockk", name = "mockk", version = "1.13.5" }
 testCoroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
