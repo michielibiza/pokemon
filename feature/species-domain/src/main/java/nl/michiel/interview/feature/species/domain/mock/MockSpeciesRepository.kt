@@ -13,7 +13,7 @@ class MockSpeciesRepository : SpeciesRepository {
     }
 
     override fun getSpecies(id: Long): Observable<SpecieDetails> {
-        return Observable.just(SpecieDetails(bulbasaur, ivysaur))
+        return Observable.just(SpecieDetails(bulbasaur, DESCRIPTION, CAPTURE_RATE, ivysaur))
             .delay(300, TimeUnit.MILLISECONDS)
     }
 
@@ -21,20 +21,19 @@ class MockSpeciesRepository : SpeciesRepository {
         val bulbasaur = Specie(
             1,
             "Bulbasaur",
-            "A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.",
-            45
         )
         val ivysaur = Specie(
             2,
             "Ivysaur",
-            "When the bulb on its back grows large, it appears to lose the ability to stand on its hind legs.",
-            45
         )
         val venusaur = Specie(
             3,
             "Venusaur",
-            "The plant blooms when it is absorbing solar energy. It stays on the move to seek sunlight.",
-            45
         )
+
+        const val DESCRIPTION =
+            "A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon."
+        const val CAPTURE_RATE = 45
+
     }
 }
