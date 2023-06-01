@@ -14,6 +14,7 @@ data class PokemonSpecies(
     fun flavorText(language: String = DEFAULT_LANGUAGE, version: String = DEFAULT_VERSION) = flavor_text_entries
         .firstOrNull { it.language.name == language && it.version.name == version }
         ?.flavor_text
+        ?.replace("\u000c", "\n\n")
 
     fun genusText(language: String = DEFAULT_LANGUAGE) = genera.firstOrNull { it.language.name == language }?.genus
 

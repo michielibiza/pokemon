@@ -34,7 +34,7 @@ class DeserialiseSpeciesTest {
         assertEquals("evolution", 1, result.evolution_chain.id())
 
         val expectedText =
-            "A strange seed was\nplanted on its\nback at birth.\u000cThe plant sprouts\nand grows with\nthis POKéMON."
+             "A strange seed was\nplanted on its\nback at birth.\n\nThe plant sprouts\nand grows with\nthis POKéMON."
         assertEquals("flavor text", expectedText, result.flavorText())
     }
 }
