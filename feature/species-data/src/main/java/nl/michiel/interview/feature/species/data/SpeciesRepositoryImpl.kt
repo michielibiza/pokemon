@@ -2,6 +2,9 @@ package nl.michiel.interview.feature.species.data
 
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import nl.michiel.interview.feature.species.data.api.EvolutionChain
+import nl.michiel.interview.feature.species.data.api.NamedUrl
+import nl.michiel.interview.feature.species.data.api.PokemonSpecies
 import nl.michiel.interview.feature.species.data.api.PokemonSpeciesService
 import nl.michiel.interview.feature.species.domain.SpeciesRepository
 import nl.michiel.interview.feature.species.domain.entities.Species
@@ -21,6 +24,7 @@ class SpeciesRepositoryImpl(
             .subscribeOn(Schedulers.io())
     }
 
+    //TODO get the capture rate of the next evolution
     override fun getSpecies(id: Long): Observable<SpeciesDetails> {
         return apiService
             .getPokemonSpecies(id)
@@ -28,16 +32,24 @@ class SpeciesRepositoryImpl(
                 apiService
                     .getEvolutionChain(species.evolution_chain.id())
                     .map { chain ->
-                        SpeciesDetails(
-                            species = Species(id, species.name),
-                            description = species.flavorText() ?: "",
-                            captureRate = species.capture_rate,
-                            nextEvolution = chain.chain.flatten()
-                                .firstOrNull { it.id() != id }
-                                ?.let { Species(it.id(), it.name) },
-                        )
+                        species.toDomain(chain)
                     }
             }
             .subscribeOn(Schedulers.io())
     }
 }
+
+fun PokemonSpecies.toDomain(chain: EvolutionChain): SpeciesDetails {
+    return SpeciesDetails(
+        species = Species(id, name),
+        description = flavorText(),
+        captureRate = this.capture_rate,
+        nextEvolution = chain.nextEvolutionOf(name)?.toSpecies(),
+        genus = this.genusText(),
+        growthRate = this.growth_rate.name,
+        habitat = this.habitat.name,
+        shape = this.shape.name,
+    )
+}
+
+private fun NamedUrl.toSpecies(): Species = Species(id(), name)

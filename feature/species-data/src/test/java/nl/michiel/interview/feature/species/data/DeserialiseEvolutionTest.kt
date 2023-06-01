@@ -1,8 +1,13 @@
 package nl.michiel.interview.feature.species.data
 
+import nl.michiel.interview.feature.species.data.fixtures.SPECIES_1
+import nl.michiel.interview.feature.species.data.fixtures.SPECIES_2
+import nl.michiel.interview.feature.species.data.fixtures.SPECIES_3
 import nl.michiel.interview.feature.species.data.fixtures.evolutionAdapter
 import nl.michiel.interview.feature.species.data.fixtures.evolutionJson
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class DeserialiseEvolutionTest {
@@ -10,14 +15,29 @@ class DeserialiseEvolutionTest {
     @Test
     fun deserialiseEvolution() {
         val result = evolutionAdapter.fromJson(evolutionJson)!!
-        val chain = result.chain.flatten()
 
-        assertEquals("chain length", 3, chain.size)
-        assertEquals("first specie", "bulbasaur", chain[0].name)
-        assertEquals("first specie", 1, chain[0].id())
-        assertEquals("second specie", "ivysaur", chain[1].name)
-        assertEquals("second specie", 2, chain[1].id())
-        assertEquals("third specie", "venusaur", chain[2].name)
-        assertEquals("third specie", 3, chain[2].id())
+        val firstSpecies = result.chain.species
+        assertEquals("first species", "bulbasaur", firstSpecies.name)
+        assertEquals("first species", 1, firstSpecies.id())
+
+        val secondSpecies = result.chain.evolves_to.first().species
+        assertEquals("second species", "ivysaur", secondSpecies.name)
+        assertEquals("second species", 2, secondSpecies.id())
+
+
+        val thirdSpecies = result.chain.evolves_to.first().evolves_to.first().species
+        assertEquals("third species", "venusaur", thirdSpecies.name)
+        assertEquals("third species", 3, thirdSpecies.id())
+
+        assertTrue("no fourth species", result.chain.evolves_to.first().evolves_to.first().evolves_to.isEmpty())
+    }
+
+    @Test
+    fun nextEvolutionOfTest() {
+        val result = evolutionAdapter.fromJson(evolutionJson)!!
+
+        assertEquals("first evolution", SPECIES_2, result.nextEvolutionOf(SPECIES_1)?.name)
+        assertEquals("second evolution", SPECIES_3, result.nextEvolutionOf(SPECIES_2)?.name)
+        assertNull("no third evolution", result.nextEvolutionOf(SPECIES_3)?.name)
     }
 }

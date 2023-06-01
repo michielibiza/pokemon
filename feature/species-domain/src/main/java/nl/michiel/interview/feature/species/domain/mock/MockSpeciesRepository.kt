@@ -13,7 +13,18 @@ class MockSpeciesRepository : SpeciesRepository {
     }
 
     override fun getSpecies(id: Long): Observable<SpeciesDetails> {
-        return Observable.just(SpeciesDetails(bulbasaur, DESCRIPTION, CAPTURE_RATE, ivysaur))
+        return Observable.just(
+            SpeciesDetails(
+                bulbasaur,
+                DESCRIPTION,
+                CAPTURE_RATE,
+                "Seed",
+                "Medium",
+                "Grassland",
+                "Quadruped",
+                ivysaur,
+            )
+        )
             .delay(300, TimeUnit.MILLISECONDS)
     }
 

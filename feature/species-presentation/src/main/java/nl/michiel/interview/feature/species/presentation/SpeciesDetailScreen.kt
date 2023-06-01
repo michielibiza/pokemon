@@ -1,11 +1,11 @@
 package nl.michiel.interview.feature.species.presentation
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -58,19 +59,20 @@ fun SpeciesDetailScreen(name: String, details: SpeciesDetails?) {
             .padding(16.dp, 24.dp)
     ) {
         Row {
-            Text(
-                details.description,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.medium)
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-                    .padding(16.dp),
-            )
+            details.description?.let { description ->
+                Text(
+                    description,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .padding(16.dp),
+                )
+            }
             Spacer(Modifier.weight(1f))
             val imageModifier = Modifier
                 .size(96.dp)
-                .aspectRatio(1f)
                 .clip(MaterialTheme.shapes.medium)
             if (LocalInspectionMode.current) {
                 // show dummy in preview
@@ -80,17 +82,42 @@ fun SpeciesDetailScreen(name: String, details: SpeciesDetails?) {
             }
         }
         Spacer(Modifier.height(24.dp))
-        Text(
-            "Capture rate: ${details.captureRate}",
-            style = MaterialTheme.typography.bodyMedium
-        )
-        Spacer(Modifier.height(8.dp))
+        PropertyText(R.string.details_genus, details.genus)
+        PropertyText(R.string.details_habitat, details.habitat)
+        PropertyText(R.string.details_shape, details.shape)
+        PropertyText(R.string.details_growth_rate, details.growthRate)
+        PropertyText(R.string.details_capture_rate, details.captureRate.toString())
         details.nextEvolution?.let { nextEvolution ->
-            Text(
-                "Evolves into ${nextEvolution.name}",
-                style = MaterialTheme.typography.bodyMedium
-            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("Next Evolution", style = MaterialTheme.typography.titleMedium)
+            Spacer(modifier = Modifier.height(8.dp))
+            Row {
+                val imageModifier = Modifier
+                    .size(96.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                if (LocalInspectionMode.current) {
+                    Box(imageModifier.background(MaterialTheme.colorScheme.secondary))
+                } else {
+                    AsyncImage(nextEvolution.imageUrl, "", imageModifier)
+                }
+                Spacer(Modifier.width(16.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(nextEvolution.name, style = MaterialTheme.typography.bodyMedium)
+                    val newRate = details.nextEvolutionCaptureRate
+                    PropertyText(R.string.details_capture_rate, value = newRate?.toString() ?: "?")
+                    // TODO show capture rate difference with colors
+                }
+            }
         }
+    }
+}
+
+@Composable
+fun PropertyText(@StringRes name: Int, value: String?) {
+    Row(Modifier.padding(bottom = 8.dp)) {
+        Text(stringResource(name), style = MaterialTheme.typography.bodySmall)
+        Spacer(Modifier.weight(1f))
+        Text(value ?: "?", style = MaterialTheme.typography.bodyMedium)
     }
 }
 
@@ -102,8 +129,12 @@ fun PreviewDetails() {
             "bulbasaur",
             SpeciesDetails(
                 Species(1, "bulbasaur"),
-                "A strange seed was\nplanted on its\nback at birth.\n\nThe plant sprouts\nand grows with\nthis POKéMON.",
+                "A strange seed was\nplanted on its\nback at birth.\nThe plant sprouts\nand grows with\nthis POKéMON.",
                 45,
+                "Seed",
+                "medium-slow",
+                "grassland",
+                "quadruped",
                 Species(2, "ivysaur"),
             )
         )

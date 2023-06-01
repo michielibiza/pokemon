@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="details_genus">\"Genus\"</string>
+    <string name="details_habitat">Habitat</string>
+    <string name="details_shape">Shape</string>
+    <string name="details_growth_rate">Growth Rate</string>
+    <string name="details_capture_rate">Capture Rate</string>
+</resources>
