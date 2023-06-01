@@ -45,6 +45,7 @@ koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = 
 koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version = "3.4.2" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
+retrofit-rx = { group = "com.squareup.retrofit2", name = "adapter-rxjava3", version.ref = "retrofit" }
 loggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version = "4.11.0" }
 room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 roomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }

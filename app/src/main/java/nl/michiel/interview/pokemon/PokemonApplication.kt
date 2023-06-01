@@ -1,7 +1,7 @@
 package nl.michiel.interview.pokemon
 
 import android.app.Application
-import nl.michiel.interview.feature.species.domain.mock.mockSpeciesDomainModule
+import nl.michiel.interview.feature.species.data.di.speciesDataModule
 import nl.michiel.interview.feature.species.presentation.di.speciesPresentationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -22,7 +22,7 @@ class PokemonApplication : Application() {
             androidLogger()
             modules(
                 speciesPresentationModule,
-                mockSpeciesDomainModule,
+                speciesDataModule,
             )
         }
     }

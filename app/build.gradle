@@ -61,6 +61,7 @@ dependencies {
     implementation libs.timber
 
     implementation project(":core:design")
+    implementation project(":feature:species-data")
     implementation project(":feature:species-domain")
     implementation project(":feature:species-presentation")
 

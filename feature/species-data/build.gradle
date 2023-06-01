@@ -36,6 +36,10 @@ dependencies {
     implementation libs.koin
     implementation libs.retrofit
     implementation libs.retrofit.moshi
+    implementation libs.retrofit.rx
+    implementation libs.loggingInterceptor
+
+    implementation project(":feature:species-domain")
 
     testImplementation libs.junit
 }

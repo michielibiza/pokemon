@@ -4,5 +4,5 @@ data class SpecieDetails(
     val specie: Specie,
     val description: String,
     val captureRate: Int,
-    val nextEvolution: Specie,
+    val nextEvolution: Specie?,
 )
