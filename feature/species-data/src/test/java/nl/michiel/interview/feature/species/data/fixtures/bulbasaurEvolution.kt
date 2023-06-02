@@ -1,5 +1,7 @@
 package nl.michiel.interview.feature.species.data.fixtures
 
+fun getEvolution() = evolutionAdapter.fromJson(evolutionJson)!!
+
 val evolutionJson = """
     {
       "baby_trigger_item":null,

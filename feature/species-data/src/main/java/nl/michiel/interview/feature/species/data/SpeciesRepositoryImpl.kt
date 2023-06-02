@@ -2,6 +2,7 @@ package nl.michiel.interview.feature.species.data
 
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import nl.michiel.interview.feature.species.data.api.EvolutionChain
@@ -17,6 +18,7 @@ import nl.michiel.interview.feature.species.domain.entities.SpeciesDetails
 class SpeciesRepositoryImpl(
     private val apiService: PokemonSpeciesService,
     private val database: SpeciesDao,
+    private val ioScheduler: Scheduler = Schedulers.io(),
 ) : SpeciesRepository {
 
     private val _speciesFilter = BehaviorSubject.createDefault("")
@@ -30,10 +32,9 @@ class SpeciesRepositoryImpl(
             .map { entities ->
                 entities.map { it.toDomain() }
             }
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(ioScheduler)
     }
 
-    //TODO get the capture rate of the next evolution
     override fun getSpeciesDetails(id: Long): Observable<SpeciesDetails> {
         return apiService
             .getPokemonSpecies(id)
@@ -57,14 +58,14 @@ class SpeciesRepositoryImpl(
                     Observable.just(details)
                 }
             }
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(ioScheduler)
     }
 
     override fun hasData(): Observable<Boolean> {
         return database
             .count()
             .map { count -> count > 0 }
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(ioScheduler)
     }
 
     override fun setSpeciesFilter(filter: String) {
@@ -87,7 +88,7 @@ class SpeciesRepositoryImpl(
                     // add the first page, the range above starts at 1, so we don't download it twice
                     .startWith(Observable.just(page))
             }
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(ioScheduler)
             .doOnNext { page ->
                 val entities = page.results.map { it.toSpeciesEntity() }
                 database.addAll(entities)

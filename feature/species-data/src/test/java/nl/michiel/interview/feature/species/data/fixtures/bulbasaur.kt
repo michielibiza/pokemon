@@ -1,5 +1,7 @@
 package nl.michiel.interview.feature.species.data.fixtures
 
+fun getBulbasaur() = speciesAdapter.fromJson(bulbasaurJson)!!
+
 val bulbasaurJson = """
     {
       "base_happiness":50,

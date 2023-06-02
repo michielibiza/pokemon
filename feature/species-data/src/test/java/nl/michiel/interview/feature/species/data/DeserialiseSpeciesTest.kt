@@ -1,10 +1,8 @@
 package nl.michiel.interview.feature.species.data
 
 import nl.michiel.interview.feature.species.data.fixtures.SPECIES_1
-import nl.michiel.interview.feature.species.data.fixtures.bulbasaurJson
-import nl.michiel.interview.feature.species.data.fixtures.specieAdapter
-import nl.michiel.interview.feature.species.data.fixtures.speciesPageAdapter
-import nl.michiel.interview.feature.species.data.fixtures.speciesPageJson
+import nl.michiel.interview.feature.species.data.fixtures.getBulbasaur
+import nl.michiel.interview.feature.species.data.fixtures.getSpeciesPage
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -12,7 +10,7 @@ class DeserialiseSpeciesTest {
 
     @Test
     fun deserialiseList() {
-        val listResult = speciesPageAdapter.fromJson(speciesPageJson)!!
+        val listResult = getSpeciesPage()
 
         assertEquals("total items", 1010, listResult.count)
         assertEquals("items on page", 20, listResult.results.count())
@@ -23,7 +21,7 @@ class DeserialiseSpeciesTest {
 
     @Test
     fun deserialiseBulbasaur() {
-        val result = specieAdapter.fromJson(bulbasaurJson)!!
+        val result = getBulbasaur()
 
         assertEquals(SPECIES_1, result.name)
         assertEquals("id of bulbasaur", 1, result.id)

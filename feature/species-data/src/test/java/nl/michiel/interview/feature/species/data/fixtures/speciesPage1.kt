@@ -1,5 +1,7 @@
 package nl.michiel.interview.feature.species.data.fixtures
 
+fun getSpeciesPage() = speciesPageAdapter.fromJson(speciesPageJson)!!
+
 val speciesPageJson = """
     {
       "count":1010,

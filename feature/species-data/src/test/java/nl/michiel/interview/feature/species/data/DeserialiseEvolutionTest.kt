@@ -3,8 +3,7 @@ package nl.michiel.interview.feature.species.data
 import nl.michiel.interview.feature.species.data.fixtures.SPECIES_1
 import nl.michiel.interview.feature.species.data.fixtures.SPECIES_2
 import nl.michiel.interview.feature.species.data.fixtures.SPECIES_3
-import nl.michiel.interview.feature.species.data.fixtures.evolutionAdapter
-import nl.michiel.interview.feature.species.data.fixtures.evolutionJson
+import nl.michiel.interview.feature.species.data.fixtures.getEvolution
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -14,7 +13,7 @@ class DeserialiseEvolutionTest {
 
     @Test
     fun deserialiseEvolution() {
-        val result = evolutionAdapter.fromJson(evolutionJson)!!
+        val result = getEvolution()
 
         val firstSpecies = result.chain.species
         assertEquals("first species", "bulbasaur", firstSpecies.name)
@@ -34,7 +33,7 @@ class DeserialiseEvolutionTest {
 
     @Test
     fun nextEvolutionOfTest() {
-        val result = evolutionAdapter.fromJson(evolutionJson)!!
+        val result = getEvolution()
 
         assertEquals("first evolution", SPECIES_2, result.nextEvolutionOf(SPECIES_1)?.name)
         assertEquals("second evolution", SPECIES_3, result.nextEvolutionOf(SPECIES_2)?.name)
