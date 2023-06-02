@@ -39,7 +39,9 @@ class SpeciesRepositoryImpl(
             .getPokemonSpecies(id)
             .flatMap { species ->
                 apiService
-                    .getEvolutionChain(species.evolution_chain.id())
+                    .getEvolutionChain(
+                        species.evolution_chain?.id() ?: 0
+                    ) // we assume the evolution chain is always present
                     .map { chain ->
                         species.toDomain(chain)
                     }
@@ -102,9 +104,9 @@ fun PokemonSpecies.toDomain(chain: EvolutionChain): SpeciesDetails {
         description = flavorText(),
         captureRate = this.capture_rate,
         genus = this.genusText(),
-        growthRate = this.growth_rate.name,
-        habitat = this.habitat.name,
-        shape = this.shape.name,
+        growthRate = this.growth_rate?.name ?: "?",
+        habitat = this.habitat?.name ?: "?",
+        shape = this.shape?.name ?: "?",
         nextEvolution = chain.nextEvolutionOf(name)?.toSpecies(),
     )
 }

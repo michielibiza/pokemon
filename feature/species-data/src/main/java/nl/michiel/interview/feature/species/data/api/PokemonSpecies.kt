@@ -6,10 +6,10 @@ data class PokemonSpecies(
     val capture_rate: Int,
     val flavor_text_entries: List<FlavorTextEntry>,
     val genera: List<Genera>,
-    val growth_rate: NamedUrl,
-    val habitat: NamedUrl,
-    val shape: NamedUrl,
-    val evolution_chain: NamedUrl,
+    val growth_rate: NamedUrl?,
+    val habitat: NamedUrl?,
+    val shape: NamedUrl?,
+    val evolution_chain: NamedUrl?,
 ) {
     fun flavorText(language: String = DEFAULT_LANGUAGE, version: String = DEFAULT_VERSION) = flavor_text_entries
         .firstOrNull { it.language.name == language && it.version.name == version }

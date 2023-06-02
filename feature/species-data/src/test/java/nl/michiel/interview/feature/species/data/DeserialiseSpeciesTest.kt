@@ -28,11 +28,11 @@ class DeserialiseSpeciesTest {
         assertEquals(SPECIES_1, result.name)
         assertEquals("id of bulbasaur", 1, result.id)
         assertEquals("capture rate", 45, result.capture_rate)
-        assertEquals("growth rate", "medium-slow", result.growth_rate.name)
-        assertEquals("habitat", "grassland", result.habitat.name)
-        assertEquals("shape", "quadruped", result.shape.name)
+        assertEquals("growth rate", "medium-slow", result.growth_rate?.name)
+        assertEquals("habitat", "grassland", result.habitat?.name)
+        assertEquals("shape", "quadruped", result.shape?.name)
         assertEquals("genera", "Seed Pokémon", result.genusText())
-        assertEquals("evolution", 1, result.evolution_chain.id())
+        assertEquals("evolution", 1L, result.evolution_chain?.id())
 
         val expectedText =
             "A strange seed was\nplanted on its\nback at birth.\nThe plant sprouts\nand grows with\nthis POKéMON."
