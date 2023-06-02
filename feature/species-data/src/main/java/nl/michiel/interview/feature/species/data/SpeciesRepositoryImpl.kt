@@ -81,7 +81,7 @@ class SpeciesRepositoryImpl(
                 // once we've loaded the first page we know how many pages there are
                 // create a range of pages and load them all
                 Observable
-                    .range(1, 1 + (page.count / pageSize))
+                    .range(1, (page.count / pageSize))
                     .flatMap { pageNumber ->
                         apiService.getPokemonSpeciesPage(offset = pageNumber * pageSize, limit = pageSize)
                     }
