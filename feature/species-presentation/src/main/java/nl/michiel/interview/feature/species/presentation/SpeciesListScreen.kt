@@ -14,6 +14,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -42,9 +44,11 @@ fun SpeciesListScreen(
 ) {
     val species = remember { viewModel.getSpecies() }.subscribeAsState(emptyList())
     val filter = viewModel.speciesFilter.subscribeAsState("")
+    val loadState = viewModel.dataState.subscribeAsState(initial = DataState.Unknown)
     SpeciesListScreen(
         species.value,
         filter.value,
+        loadState.value,
         onSpeciesClick,
         onFilterChanged = { viewModel.onFilterChanged(it) },
     )
@@ -55,6 +59,7 @@ fun SpeciesListScreen(
 fun SpeciesListScreen(
     species: List<Species>,
     filter: String,
+    loadState: DataState,
     onSpeciesClick: (Species) -> Unit = {},
     onFilterChanged: (String) -> Unit = {},
 ) {
@@ -83,10 +88,60 @@ fun SpeciesListScreen(
                 content = {}
             )
         }
-        LazyColumn(Modifier.weight(1f)) {
-            items(species.size) { index ->
-                SpeciesCard(species[index], onClick = { onSpeciesClick(species[index]) })
-            }
+        when (loadState) {
+            is DataState.Error -> ErrorRow(loadState.message)
+            DataState.Loading -> LoadingRow()
+            else -> Unit
+        }
+        ShowSpeciesList(species, onSpeciesClick)
+    }
+}
+
+@Composable
+fun MessageRow(message: String, iconContent: @Composable () -> Unit) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .padding(16.dp, 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        iconContent()
+        Spacer(Modifier.width(8.dp))
+        Text(message, color = MaterialTheme.colorScheme.onPrimaryContainer, style = MaterialTheme.typography.bodySmall)
+    }
+}
+
+@Composable
+fun LoadingRow() {
+    MessageRow("Loading...") {
+        CircularProgressIndicator(
+            modifier = Modifier.size(24.dp),
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+    }
+}
+
+@Composable
+fun ErrorRow(message: String) {
+    MessageRow(message) {
+        Icon(
+            Icons.Default.Warning,
+            contentDescription = null,
+            modifier = Modifier.size(24.dp),
+            tint = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+    }
+}
+
+@Composable
+fun ShowSpeciesList(
+    species: List<Species>,
+    onSpeciesClick: (Species) -> Unit = {},
+) {
+    LazyColumn() {
+        items(species.size) { index ->
+            SpeciesCard(species[index], onClick = { onSpeciesClick(species[index]) })
         }
     }
 }
@@ -132,13 +187,38 @@ fun SpeciesCardPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, heightDp = 320)
 @Composable
-fun PreviewScreen() {
+fun PreviewScreenUpToDate() {
     PokemonTheme {
         SpeciesListScreen(
             listOf(MockSpeciesRepository.ivysaur, MockSpeciesRepository.bulbasaur),
             "filter",
+            DataState.UpToDate,
+        )
+    }
+}
+
+@Preview(showBackground = true, heightDp = 320)
+@Composable
+fun PreviewScreenLoading() {
+    PokemonTheme {
+        SpeciesListScreen(
+            listOf(MockSpeciesRepository.ivysaur, MockSpeciesRepository.bulbasaur),
+            "filter",
+            DataState.Loading,
+        )
+    }
+}
+
+@Preview(showBackground = true, heightDp = 320)
+@Composable
+fun PreviewScreenError() {
+    PokemonTheme {
+        SpeciesListScreen(
+            listOf(MockSpeciesRepository.ivysaur, MockSpeciesRepository.bulbasaur),
+            "filter",
+            DataState.Error("no internet"),
         )
     }
 }

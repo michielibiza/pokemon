@@ -12,7 +12,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,25 +43,40 @@ fun SpeciesDetailScreen(
     name: String,
     viewModel: SpeciesDetailViewModel = koinViewModel()
 ) {
-    val species = remember { viewModel.getSpeciesDetails(id) }
-    val details by species.subscribeAsState(initial = null)
-    SpeciesDetailScreen(name, details)
+    val speciesObservable = remember { viewModel.getSpeciesDetails(id) }
+    val speciesState by speciesObservable.subscribeAsState(initial = ViewState.Loading)
+    SpeciesDetailScreen(name, speciesState)
 }
 
 @Composable
-fun SpeciesDetailScreen(name: String, details: SpeciesDetails?) {
-    if (details == null) {
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Row {
-                CircularProgressIndicator()
-                Spacer(Modifier.width(8.dp))
-                Text(text = "loading $name")
-            }
-        }
-        return
+fun SpeciesDetailScreen(name: String, speciesState: ViewState) {
+    when (speciesState) {
+        is ViewState.Error -> ErrorScreen(message = speciesState.message)
+        is ViewState.Loading -> LoadingScreen(name)
+        is ViewState.Data -> SpeciesDetailScreen(speciesState.speciesDetails)
     }
+}
 
-    SpeciesDetailScreen(details)
+@Composable
+fun LoadingScreen(name: String) {
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Row {
+            CircularProgressIndicator()
+            Spacer(Modifier.width(8.dp))
+            Text(text = "loading $name")
+        }
+    }
+}
+
+@Composable
+fun ErrorScreen(message: String) {
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(Icons.Default.Warning, contentDescription = null, modifier = Modifier.size(56.dp))
+            Spacer(Modifier.width(8.dp))
+            Text(message)
+        }
+    }
 }
 
 @Composable
@@ -158,16 +176,18 @@ fun PreviewDetails() {
     PokemonTheme {
         SpeciesDetailScreen(
             "bulbasaur",
-            SpeciesDetails(
-                Species(1, "bulbasaur"),
-                "A strange seed was\nplanted on its\nback at birth.\nThe plant sprouts\nand grows with\nthis POKéMON.",
-                120,
-                "Seed",
-                "medium-slow",
-                "grassland",
-                "quadruped",
-                Species(2, "ivysaur"),
-                45,
+            ViewState.Data(
+                SpeciesDetails(
+                    Species(1, "bulbasaur"),
+                    "A strange seed was\nplanted on its\nback at birth.\nThe plant sprouts\nand grows with\nthis POKéMON.",
+                    120,
+                    "Seed",
+                    "medium-slow",
+                    "grassland",
+                    "quadruped",
+                    Species(2, "ivysaur"),
+                    45,
+                )
             )
         )
     }
@@ -197,13 +217,24 @@ fun PreviewRateChangeDown() {
     }
 }
 
-@Preview(showBackground = true, widthDp = 360, heightDp = 640)
+@Preview(showBackground = true, widthDp = 360, heightDp = 240)
 @Composable
-fun PreviewDetailsEmpty() {
+fun PreviewDetailsLoading() {
     PokemonTheme {
         SpeciesDetailScreen(
             "bulbasaur",
-            null
+            ViewState.Loading
+        )
+    }
+}
+
+@Preview(showBackground = true, widthDp = 360, heightDp = 240)
+@Composable
+fun PreviewDetailsError() {
+    PokemonTheme {
+        SpeciesDetailScreen(
+            "bulbasaur",
+            ViewState.Error("no internet")
         )
     }
 }
