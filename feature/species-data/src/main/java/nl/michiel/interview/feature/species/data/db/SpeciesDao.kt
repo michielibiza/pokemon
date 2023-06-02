@@ -14,6 +14,9 @@ interface SpeciesDao {
     @Query("SELECT * FROM species WHERE name LIKE '%' || :filter || '%'")
     fun getAllWithNameContains(filter: String): Observable<List<SpeciesEntity>>
 
+    @Query("SELECT COUNT(*) FROM species")
+    fun count(): Observable<Int>
+
     @Upsert
     fun addAll(species: List<SpeciesEntity>)
 }

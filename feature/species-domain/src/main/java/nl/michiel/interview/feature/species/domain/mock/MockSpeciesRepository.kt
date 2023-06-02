@@ -29,6 +29,10 @@ class MockSpeciesRepository : SpeciesRepository {
             .delay(300, TimeUnit.MILLISECONDS)
     }
 
+    override fun hasData(): Observable<Boolean> {
+        return Observable.just(true)
+    }
+
     override fun sync(): Completable {
         return Completable.complete()
     }

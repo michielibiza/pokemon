@@ -52,6 +52,13 @@ class SpeciesRepositoryImpl(
             .subscribeOn(Schedulers.io())
     }
 
+    override fun hasData(): Observable<Boolean> {
+        return database
+            .count()
+            .map { count -> count > 0 }
+            .subscribeOn(Schedulers.io())
+    }
+
     override fun sync(): Completable {
         val pageSize = 100
         //TODO use WorkManager instead of letting the caller subscribe

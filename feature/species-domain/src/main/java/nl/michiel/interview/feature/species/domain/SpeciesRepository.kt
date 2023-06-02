@@ -11,6 +11,8 @@ interface SpeciesRepository {
 
     fun getSpeciesDetails(id: Long): Observable<SpeciesDetails>
 
+    fun hasData(): Observable<Boolean>
+
     /**
      * queries the list of known Species from the API and stores it in the DB
      */
