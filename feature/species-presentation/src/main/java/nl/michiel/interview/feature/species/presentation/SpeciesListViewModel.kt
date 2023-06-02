@@ -27,4 +27,10 @@ class SpeciesListViewModel(
 
     fun getSpecies() = repository.getSpecies()
 
+    val speciesFilter = repository.speciesFilter
+
+    fun onFilterChanged(filter: String) {
+        repository.setSpeciesFilter(filter)
+    }
+
 }

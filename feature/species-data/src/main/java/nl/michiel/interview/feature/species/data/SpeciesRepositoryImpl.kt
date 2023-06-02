@@ -3,6 +3,7 @@ package nl.michiel.interview.feature.species.data
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import nl.michiel.interview.feature.species.data.api.EvolutionChain
 import nl.michiel.interview.feature.species.data.api.NamedUrl
 import nl.michiel.interview.feature.species.data.api.PokemonSpecies
@@ -18,9 +19,14 @@ class SpeciesRepositoryImpl(
     private val database: SpeciesDao,
 ) : SpeciesRepository {
 
+    private val _speciesFilter = BehaviorSubject.createDefault("")
+    override val speciesFilter: Observable<String> = _speciesFilter
+
     override fun getSpecies(): Observable<List<Species>> {
-        return database
-            .getAll()
+        return _speciesFilter
+            .flatMap { filter ->
+                database.getAllWithNameContains(filter)
+            }
             .map { entities ->
                 entities.map { it.toDomain() }
             }
@@ -59,6 +65,10 @@ class SpeciesRepositoryImpl(
             .subscribeOn(Schedulers.io())
     }
 
+    override fun setSpeciesFilter(filter: String) {
+        _speciesFilter.onNext(filter)
+    }
+
     override fun sync(): Completable {
         val pageSize = 100
         //TODO use WorkManager instead of letting the caller subscribe
@@ -91,11 +101,11 @@ fun PokemonSpecies.toDomain(chain: EvolutionChain): SpeciesDetails {
         species = Species(id, name),
         description = flavorText(),
         captureRate = this.capture_rate,
-        nextEvolution = chain.nextEvolutionOf(name)?.toSpecies(),
         genus = this.genusText(),
         growthRate = this.growth_rate.name,
         habitat = this.habitat.name,
         shape = this.shape.name,
+        nextEvolution = chain.nextEvolutionOf(name)?.toSpecies(),
     )
 }
 

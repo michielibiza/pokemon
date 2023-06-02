@@ -7,6 +7,8 @@ import nl.michiel.interview.feature.species.domain.entities.SpeciesDetails
 
 interface SpeciesRepository {
 
+    val speciesFilter: Observable<String>
+
     fun getSpecies(): Observable<List<Species>>
 
     fun getSpeciesDetails(id: Long): Observable<SpeciesDetails>
@@ -17,4 +19,6 @@ interface SpeciesRepository {
      * queries the list of known Species from the API and stores it in the DB
      */
     fun sync(): Completable
+
+    fun setSpeciesFilter(filter: String)
 }

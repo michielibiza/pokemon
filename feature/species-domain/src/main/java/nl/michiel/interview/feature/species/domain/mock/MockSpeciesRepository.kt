@@ -8,6 +8,9 @@ import nl.michiel.interview.feature.species.domain.entities.SpeciesDetails
 import java.util.concurrent.TimeUnit
 
 class MockSpeciesRepository : SpeciesRepository {
+
+    override val speciesFilter: Observable<String> = Observable.just("")
+
     override fun getSpecies(): Observable<List<Species>> {
         return Observable.just(listOf(bulbasaur, ivysaur, venusaur))
             .delay(500, TimeUnit.MILLISECONDS)
@@ -36,6 +39,8 @@ class MockSpeciesRepository : SpeciesRepository {
     override fun sync(): Completable {
         return Completable.complete()
     }
+
+    override fun setSpeciesFilter(filter: String) = Unit
 
     companion object {
         val bulbasaur = Species(
