@@ -8,6 +8,7 @@ import nl.michiel.interview.feature.species.domain.SpeciesRepository
 
 class SpeciesListViewModel(
     private val repository: SpeciesRepository,
+
 ) : ViewModel() {
 
     private val _dataState = BehaviorSubject.createDefault<DataState>(DataState.Unknown)
@@ -39,7 +40,8 @@ class SpeciesListViewModel(
 
     fun getSpecies() = repository.getSpecies()
 
-    val speciesFilter = repository.speciesFilter
+    val speciesFilter
+        get() = repository.speciesFilter
 
     fun onFilterChanged(filter: String) {
         repository.setSpeciesFilter(filter)

@@ -54,6 +54,7 @@ dependencies {
     implementation project(":feature:species-domain")
 
     testImplementation libs.junit
+    testImplementation libs.mockk
 
     debugImplementation libs.ui.tooling
     debugImplementation libs.ui.test.manifest
