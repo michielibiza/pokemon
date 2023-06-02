@@ -49,7 +49,7 @@ fun SpeciesDetailScreen(
 }
 
 @Composable
-fun SpeciesDetailScreen(name: String, speciesState: ViewState) {
+private fun SpeciesDetailScreen(name: String, speciesState: ViewState) {
     when (speciesState) {
         is ViewState.Error -> ErrorScreen(message = speciesState.message)
         is ViewState.Loading -> LoadingScreen(name)
@@ -58,7 +58,7 @@ fun SpeciesDetailScreen(name: String, speciesState: ViewState) {
 }
 
 @Composable
-fun LoadingScreen(name: String) {
+private fun LoadingScreen(name: String) {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Row {
             CircularProgressIndicator()
@@ -69,7 +69,7 @@ fun LoadingScreen(name: String) {
 }
 
 @Composable
-fun ErrorScreen(message: String) {
+private fun ErrorScreen(message: String) {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(Icons.Default.Warning, contentDescription = null, modifier = Modifier.size(56.dp))
@@ -80,7 +80,7 @@ fun ErrorScreen(message: String) {
 }
 
 @Composable
-fun SpeciesDetailScreen(details: SpeciesDetails) {
+private fun SpeciesDetailScreen(details: SpeciesDetails) {
     Column(
         Modifier
             .fillMaxWidth()
@@ -126,7 +126,7 @@ private fun EvolutionCaptureRate(newRate: Int, oldRate: Int) {
 }
 
 @Composable
-fun RateChangeText(rateChange: Int) {
+private fun RateChangeText(rateChange: Int) {
     if (rateChange == 0) {
         return
     }
@@ -162,7 +162,7 @@ private fun Avatar(avatarUrl: String) {
 }
 
 @Composable
-fun PropertyText(@StringRes name: Int, value: String?) {
+private fun PropertyText(@StringRes name: Int, value: String?) {
     Row(Modifier.padding(bottom = 8.dp)) {
         Text(stringResource(name), style = MaterialTheme.typography.bodySmall)
         Spacer(Modifier.weight(1f))
@@ -172,7 +172,7 @@ fun PropertyText(@StringRes name: Int, value: String?) {
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
-fun PreviewDetails() {
+private fun PreviewDetails() {
     PokemonTheme {
         SpeciesDetailScreen(
             "bulbasaur",
@@ -195,7 +195,7 @@ fun PreviewDetails() {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewRateChange() {
+private fun PreviewRateChange() {
     PokemonTheme {
         EvolutionCaptureRate(120, 120)
     }
@@ -203,7 +203,7 @@ fun PreviewRateChange() {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewRateChangeUp() {
+private fun PreviewRateChangeUp() {
     PokemonTheme {
         EvolutionCaptureRate(120, 45)
     }
@@ -211,7 +211,7 @@ fun PreviewRateChangeUp() {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewRateChangeDown() {
+private fun PreviewRateChangeDown() {
     PokemonTheme {
         EvolutionCaptureRate(120, 255)
     }
@@ -219,7 +219,7 @@ fun PreviewRateChangeDown() {
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 240)
 @Composable
-fun PreviewDetailsLoading() {
+private fun PreviewDetailsLoading() {
     PokemonTheme {
         SpeciesDetailScreen(
             "bulbasaur",
@@ -230,7 +230,7 @@ fun PreviewDetailsLoading() {
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 240)
 @Composable
-fun PreviewDetailsError() {
+private fun PreviewDetailsError() {
     PokemonTheme {
         SpeciesDetailScreen(
             "bulbasaur",

@@ -56,7 +56,7 @@ fun SpeciesListScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SpeciesListScreen(
+private fun SpeciesListScreen(
     species: List<Species>,
     filter: String,
     loadState: DataState,
@@ -98,7 +98,7 @@ fun SpeciesListScreen(
 }
 
 @Composable
-fun MessageRow(message: String, iconContent: @Composable () -> Unit) {
+private fun MessageRow(message: String, iconContent: @Composable () -> Unit) {
     Row(
         Modifier
             .fillMaxWidth()
@@ -113,7 +113,7 @@ fun MessageRow(message: String, iconContent: @Composable () -> Unit) {
 }
 
 @Composable
-fun LoadingRow() {
+private fun LoadingRow() {
     MessageRow("Loading...") {
         CircularProgressIndicator(
             modifier = Modifier.size(24.dp),
@@ -123,7 +123,7 @@ fun LoadingRow() {
 }
 
 @Composable
-fun ErrorRow(message: String) {
+private fun ErrorRow(message: String) {
     MessageRow(message) {
         Icon(
             Icons.Default.Warning,
@@ -135,7 +135,7 @@ fun ErrorRow(message: String) {
 }
 
 @Composable
-fun ShowSpeciesList(
+private fun ShowSpeciesList(
     species: List<Species>,
     onSpeciesClick: (Species) -> Unit = {},
 ) {
@@ -147,7 +147,7 @@ fun ShowSpeciesList(
 }
 
 @Composable
-fun SpeciesCard(species: Species, onClick: () -> Unit = {}) {
+private fun SpeciesCard(species: Species, onClick: () -> Unit = {}) {
     Row(
         Modifier
             .clickable { onClick() }
@@ -181,7 +181,7 @@ fun SpeciesCard(species: Species, onClick: () -> Unit = {}) {
 
 @Preview(showBackground = true)
 @Composable
-fun SpeciesCardPreview() {
+private fun SpeciesCardPreview() {
     PokemonTheme {
         SpeciesCard(MockSpeciesRepository.ivysaur)
     }
@@ -189,7 +189,7 @@ fun SpeciesCardPreview() {
 
 @Preview(showBackground = true, heightDp = 320)
 @Composable
-fun PreviewScreenUpToDate() {
+private fun PreviewScreenUpToDate() {
     PokemonTheme {
         SpeciesListScreen(
             listOf(MockSpeciesRepository.ivysaur, MockSpeciesRepository.bulbasaur),
@@ -201,7 +201,7 @@ fun PreviewScreenUpToDate() {
 
 @Preview(showBackground = true, heightDp = 320)
 @Composable
-fun PreviewScreenLoading() {
+private fun PreviewScreenLoading() {
     PokemonTheme {
         SpeciesListScreen(
             listOf(MockSpeciesRepository.ivysaur, MockSpeciesRepository.bulbasaur),
@@ -213,7 +213,7 @@ fun PreviewScreenLoading() {
 
 @Preview(showBackground = true, heightDp = 320)
 @Composable
-fun PreviewScreenError() {
+private fun PreviewScreenError() {
     PokemonTheme {
         SpeciesListScreen(
             listOf(MockSpeciesRepository.ivysaur, MockSpeciesRepository.bulbasaur),
