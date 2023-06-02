@@ -27,7 +27,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import nl.michiel.interview.design.Green
 import nl.michiel.interview.design.PokemonTheme
+import nl.michiel.interview.design.Red
 import nl.michiel.interview.feature.species.domain.entities.Species
 import nl.michiel.interview.feature.species.domain.entities.SpeciesDetails
 import org.koin.androidx.compose.koinViewModel
@@ -56,33 +58,20 @@ fun SpeciesDetailScreen(name: String, details: SpeciesDetails?) {
         return
     }
 
+    SpeciesDetailScreen(details)
+}
+
+@Composable
+fun SpeciesDetailScreen(details: SpeciesDetails) {
     Column(
         Modifier
             .fillMaxWidth()
             .padding(16.dp, 24.dp)
     ) {
-        Row {
-            details.description?.let { description ->
-                Text(
-                    description,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier
-                        .clip(MaterialTheme.shapes.medium)
-                        .background(MaterialTheme.colorScheme.primaryContainer)
-                        .padding(16.dp),
-                )
-            }
-            Spacer(Modifier.weight(1f))
-            val imageModifier = Modifier
-                .size(96.dp)
-                .clip(MaterialTheme.shapes.medium)
-            if (LocalInspectionMode.current) {
-                // show dummy in preview
-                Box(imageModifier.background(MaterialTheme.colorScheme.secondary))
-            } else {
-                AsyncImage(details.species.imageUrl, "", imageModifier)
-            }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Avatar(details.species.imageUrl)
+            Spacer(Modifier.width(16.dp))
+            Description(details, Modifier.weight(1f))
         }
         Spacer(Modifier.height(24.dp))
         PropertyText(R.string.details_genus, details.genus)
@@ -91,27 +80,66 @@ fun SpeciesDetailScreen(name: String, details: SpeciesDetails?) {
         PropertyText(R.string.details_growth_rate, details.growthRate)
         PropertyText(R.string.details_capture_rate, details.captureRate.toString())
         details.nextEvolution?.let { nextEvolution ->
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(stringResource(R.string.details_next_evolution_title), style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Next Evolution", style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.height(8.dp))
             Row {
-                val imageModifier = Modifier
-                    .size(96.dp)
-                    .clip(MaterialTheme.shapes.medium)
-                if (LocalInspectionMode.current) {
-                    Box(imageModifier.background(MaterialTheme.colorScheme.secondary))
-                } else {
-                    AsyncImage(nextEvolution.imageUrl, "", imageModifier)
+                Column(Modifier.weight(1f)) {
+                    Text(nextEvolution.name, style = MaterialTheme.typography.displaySmall)
+                    val newRate = details.nextEvolutionCaptureRate ?: 0 // can't be null
+                    EvolutionCaptureRate(newRate, details.captureRate)
                 }
                 Spacer(Modifier.width(16.dp))
-                Column(Modifier.weight(1f)) {
-                    Text(nextEvolution.name, style = MaterialTheme.typography.bodyMedium)
-                    val newRate = details.nextEvolutionCaptureRate
-                    PropertyText(R.string.details_capture_rate, value = newRate?.toString() ?: "?")
-                    // TODO show capture rate difference with colors
-                }
+                Avatar(nextEvolution.imageUrl)
             }
         }
+    }
+}
+
+@Composable
+private fun EvolutionCaptureRate(newRate: Int, oldRate: Int) {
+    Row(Modifier.padding(bottom = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+        Text(stringResource(R.string.details_capture_rate), style = MaterialTheme.typography.bodySmall)
+        Spacer(Modifier.weight(1f))
+        Text("$newRate", style = MaterialTheme.typography.bodyMedium)
+        Spacer(Modifier.width(8.dp))
+        RateChangeText(newRate - oldRate)
+    }
+}
+
+@Composable
+fun RateChangeText(rateChange: Int) {
+    if (rateChange == 0) {
+        return
+    }
+
+    val color = if (rateChange > 0) Green else Red
+    val text = if (rateChange > 0) "(+$rateChange)" else "($rateChange)"
+    Text(text, color = color, style = MaterialTheme.typography.bodySmall)
+}
+
+@Composable
+private fun Description(details: SpeciesDetails, modifier: Modifier = Modifier) {
+    val description = details.description?.replace("\n", " ")
+        ?: stringResource(id = R.string.details_no_description)
+
+    Text(
+        description,
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun Avatar(avatarUrl: String) {
+    val imageModifier = Modifier
+        .size(96.dp)
+        .clip(MaterialTheme.shapes.medium)
+    if (LocalInspectionMode.current) {
+        // show dummy in preview
+        Box(imageModifier.background(MaterialTheme.colorScheme.secondary))
+    } else {
+        AsyncImage(avatarUrl, "", imageModifier)
     }
 }
 
@@ -133,14 +161,39 @@ fun PreviewDetails() {
             SpeciesDetails(
                 Species(1, "bulbasaur"),
                 "A strange seed was\nplanted on its\nback at birth.\nThe plant sprouts\nand grows with\nthis POKéMON.",
-                45,
+                120,
                 "Seed",
                 "medium-slow",
                 "grassland",
                 "quadruped",
                 Species(2, "ivysaur"),
+                45,
             )
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewRateChange() {
+    PokemonTheme {
+        EvolutionCaptureRate(120, 120)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewRateChangeUp() {
+    PokemonTheme {
+        EvolutionCaptureRate(120, 45)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewRateChangeDown() {
+    PokemonTheme {
+        EvolutionCaptureRate(120, 255)
     }
 }
 

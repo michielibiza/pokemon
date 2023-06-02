@@ -38,6 +38,17 @@ class SpeciesRepositoryImpl(
                         species.toDomain(chain)
                     }
             }
+            .flatMap { details ->
+                val nextSpeciesId = details.nextEvolution?.id
+                if (nextSpeciesId != null) {
+                    apiService.getPokemonSpecies(nextSpeciesId)
+                        .map { nextSpeciesDetails ->
+                            details.copy(nextEvolutionCaptureRate = nextSpeciesDetails.capture_rate)
+                        }
+                } else {
+                    Observable.just(details)
+                }
+            }
             .subscribeOn(Schedulers.io())
     }
 
