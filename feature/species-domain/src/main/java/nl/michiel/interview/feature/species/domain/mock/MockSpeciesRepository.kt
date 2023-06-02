@@ -13,7 +13,7 @@ class MockSpeciesRepository : SpeciesRepository {
             .delay(500, TimeUnit.MILLISECONDS)
     }
 
-    override fun getSpecies(id: Long): Observable<SpeciesDetails> {
+    override fun getSpeciesDetails(id: Long): Observable<SpeciesDetails> {
         return Observable.just(
             SpeciesDetails(
                 bulbasaur,

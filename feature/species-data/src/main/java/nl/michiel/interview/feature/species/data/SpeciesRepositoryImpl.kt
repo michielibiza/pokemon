@@ -28,7 +28,7 @@ class SpeciesRepositoryImpl(
     }
 
     //TODO get the capture rate of the next evolution
-    override fun getSpecies(id: Long): Observable<SpeciesDetails> {
+    override fun getSpeciesDetails(id: Long): Observable<SpeciesDetails> {
         return apiService
             .getPokemonSpecies(id)
             .flatMap { species ->

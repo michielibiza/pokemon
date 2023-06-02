@@ -7,6 +7,6 @@ class SpeciesDetailViewModel(
     private val repository: SpeciesRepository,
 ) : ViewModel() {
 
-    fun getSpecies(id: Long) = repository.getSpecies(id)
+    fun getSpeciesDetails(id: Long) = repository.getSpeciesDetails(id)
 
 }

@@ -38,7 +38,7 @@ fun SpeciesDetailScreen(
     name: String,
     viewModel: SpeciesDetailViewModel = koinViewModel()
 ) {
-    val species = remember { viewModel.getSpecies(id) }
+    val species = remember { viewModel.getSpeciesDetails(id) }
     val details by species.subscribeAsState(initial = null)
     SpeciesDetailScreen(name, details)
 }
