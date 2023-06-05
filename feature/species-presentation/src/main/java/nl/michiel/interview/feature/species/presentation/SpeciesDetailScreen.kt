@@ -2,6 +2,7 @@ package nl.michiel.interview.feature.species.presentation
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,19 +42,24 @@ import org.koin.androidx.compose.koinViewModel
 fun SpeciesDetailScreen(
     id: Long,
     name: String,
+    onSpeciesClick: (Species) -> Unit = {},
     viewModel: SpeciesDetailViewModel = koinViewModel()
 ) {
     val speciesObservable = remember(id) { viewModel.getSpeciesDetails(id) }
     val speciesState by speciesObservable.subscribeAsState(initial = ViewState.Loading)
-    SpeciesDetailScreen(name, speciesState)
+    SpeciesDetailScreen(name, speciesState, onSpeciesClick)
 }
 
 @Composable
-private fun SpeciesDetailScreen(name: String, speciesState: ViewState) {
+private fun SpeciesDetailScreen(
+    name: String,
+    speciesState: ViewState,
+    onSpeciesClick: (Species) -> Unit = {},
+) {
     when (speciesState) {
         is ViewState.Error -> ErrorScreen(message = speciesState.message)
         is ViewState.Loading -> LoadingScreen(name)
-        is ViewState.Data -> SpeciesDetailScreen(speciesState.speciesDetails)
+        is ViewState.Data -> SpeciesDetailScreen(speciesState.speciesDetails, onSpeciesClick)
     }
 }
 
@@ -80,7 +86,10 @@ private fun ErrorScreen(message: String) {
 }
 
 @Composable
-private fun SpeciesDetailScreen(details: SpeciesDetails) {
+private fun SpeciesDetailScreen(
+    details: SpeciesDetails,
+    onSpeciesClick: (Species) -> Unit = {},
+) {
     Column(
         Modifier
             .fillMaxWidth()
@@ -101,7 +110,7 @@ private fun SpeciesDetailScreen(details: SpeciesDetails) {
             Spacer(modifier = Modifier.height(24.dp))
             Text(stringResource(R.string.details_next_evolution_title), style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(16.dp))
-            Row {
+            Row(Modifier.clickable { onSpeciesClick(nextEvolution) }) {
                 Column(Modifier.weight(1f)) {
                     Text(nextEvolution.name, style = MaterialTheme.typography.displaySmall)
                     val newRate = details.nextEvolutionCaptureRate ?: 0 // can't be null

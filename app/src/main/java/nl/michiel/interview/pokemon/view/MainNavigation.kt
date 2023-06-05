@@ -60,6 +60,12 @@ fun MainNavigation() {
         }
     } ?: stringResource(R.string.app_name)
 
+    fun navigateToDetail(species: Species) {
+        navController.navigate(Routes.detail(species)) {
+            this.popUpTo(Routes.LIST)
+        }
+    }
+
     PokemonTheme {
         Scaffold(
             topBar = { AppBar(navController, title) }
@@ -72,16 +78,14 @@ fun MainNavigation() {
             ) {
                 NavHost(navController, startDestination = Routes.LIST) {
                     composable(Routes.LIST) {
-                        SpeciesListScreen(onSpeciesClick = { specie ->
-                            navController.navigate(Routes.detail(specie))
-                        })
+                        SpeciesListScreen(onSpeciesClick = ::navigateToDetail)
                     }
                     composable(Routes.DETAIL, arguments = Routes.detailArgs) { backStackEntry ->
                         backStackEntry.arguments
                             ?.let { args ->
                                 val id = args.getLong(DETAIL_ARG_ID)
                                 val name = args.getString(DETAIL_ARG_NAME) ?: ""
-                                SpeciesDetailScreen(id, name)
+                                SpeciesDetailScreen(id, name, onSpeciesClick = ::navigateToDetail)
                             }
                             ?: throw IllegalStateException("Missing arguments")
                     }
